@@ -25,10 +25,12 @@ class Bitmap:
     Attributes:
         array (np.ndarray): The image data as a NumPy array.
         transform (affine.Affine): The affine transformation matrix.
+        crs (str)
     """
 
     array: np.ndarray
     transform: affine.Affine
+    crs: str
 
 
 def bitmap_gen(
@@ -36,6 +38,7 @@ def bitmap_gen(
     output_image_size: Tuple[int, int],
     pixel_resolution: Tuple[float, float],
     geometry_collection: List,
+    crs: str,
     allow_output_to_overlap: bool = True,
 ) -> Generator[Bitmap, None, None]:
     """
@@ -46,6 +49,7 @@ def bitmap_gen(
         output_image_size (Tuple[int, int]): Output image size (width, height).
         pixel_resolution (Tuple[float, float]): Pixel resolution (pixel_width, pixel_height).
         geometry_collection (List): List of geometries to include in the bitmaps.
+        crs (str)
         allow_output_to_overlap (bool): Flag indicating if output can overlap (default True).
 
     Yields:
@@ -74,7 +78,7 @@ def bitmap_gen(
             out_shape=mesh.grid_size,
             transform=transform,
         )
-        yield Bitmap(bitmap_array, transform)
+        yield Bitmap(bitmap_array, transform, crs)
 
 
 def geomultiband(
@@ -109,7 +113,7 @@ def geomultiband(
     dst_ds.FlushCache()
 
 
-def geowrite(save_path: str, image: np.ndarray, transform: affine.Affine):
+def geowrite(save_path: str, image: np.ndarray, transform: affine.Affine, crs: str = None):
     """
     Write a GeoTIFF file using the rasterio library.
 
@@ -117,6 +121,7 @@ def geowrite(save_path: str, image: np.ndarray, transform: affine.Affine):
         save_path (str): The path to save the GeoTIFF file.
         image (np.ndarray): The image data as a NumPy array.
         transform (affine.Affine): The affine transformation matrix.
+        crs (str)
     """
 
     bands = 1 if image.ndim == 2 else image.shape[-1]
@@ -129,6 +134,7 @@ def geowrite(save_path: str, image: np.ndarray, transform: affine.Affine):
         width=image.shape[0],
         height=image.shape[1],
         transform=transform,
+        crs=crs
     ) as dst:
         dst.write(image, indexes=1)
 
@@ -146,7 +152,7 @@ def georead(
         Union[BufferedDatasetWriter, DatasetWriter]: The opened rasterio dataset.
     """
 
-    return rasterio.open(path)
+    return rasterio.open(path, 'r+')
 
 
 def shp_gen(
