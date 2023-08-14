@@ -4,7 +4,17 @@ import numpy as np
 from shapely.geometry import LineString, Point, MultiLineString, mapping
 
 
-def cut(line: LineString, dist):
+def cut(line: LineString, dist: float) -> Tuple[LineString, LineString]:
+    """
+    Split a LineString at a specified distance.
+
+    Args:
+        line (LineString): The LineString to be split.
+        dist (float): The distance at which to split the LineString.
+
+    Returns:
+        Tuple[LineString, LineString]: Two LineString segments resulting from the split.
+    """
     assert (
         0.0 < dist < line.length
     ), f"Given {dist} > {line.length}, Expected the distance of split to be less than than line length"
@@ -28,6 +38,17 @@ def cut(line: LineString, dist):
 def line_referencing(
     line: Union[LineString, MultiLineString], point: Point
 ) -> Tuple[Union[int, float], Point]:
+    """
+    Calculate the fraction of the given Point's position along the LineString and the projected Point on the LineString.
+
+    Args:
+        line (Union[LineString, MultiLineString]): The LineString or MultiLineString geometry.
+        point (Point): The Point to be projected onto the LineString.
+
+    Returns:
+        Tuple[Union[int, float], Point]: The fraction of the Point's position and the projected Point on the LineString.
+    """
+
     # https://stackoverflow.com/questions/24415806/coordinates-of-the-closest-points-of-two-geometries-in-shapely
 
     assert type(line) in [LineString, MultiLineString], (
@@ -43,7 +64,20 @@ def line_referencing(
     return fraction, project_point
 
 
-def get_reference_shift(center_line_points: List[Point], translated_line: LineString):
+def get_reference_shift(
+    center_line_points: List[Point], translated_line: LineString
+) -> List[Point]:
+    """
+    Get the projected points on a translated LineString from a list of center LineString points.
+
+    Args:
+        center_line_points (List[Point]): List of center LineString points.
+        translated_line (LineString): The translated LineString.
+
+    Returns:
+        List[Point]: List of projected points on the translated LineString.
+    """
+
     proj_pts = list()
     for pts in center_line_points:
         _, pt1 = line_referencing(line=translated_line, point=pts)
@@ -51,7 +85,21 @@ def get_reference_shift(center_line_points: List[Point], translated_line: LineSt
     return proj_pts
 
 
-def interpolate_with_delta(line: LineString, delta, distances=None) -> List:
+def interpolate_with_delta(
+    line: LineString, delta: float, distances: List[float] = None
+) -> List[Point]:
+    """
+    Interpolate points along a LineString at specified intervals or distances.
+
+    Args:
+        line (LineString): The LineString to interpolate points along.
+        delta (float): The interval or distance between interpolated points.
+        distances (List[float], optional): List of specific distances for interpolation. Defaults to None.
+
+    Returns:
+        List[Point]: List of interpolated points along the LineString.
+    """
+
     distances = (
         np.arange(0, round(line.length, 1), delta) if distances is None else distances
     )
@@ -64,6 +112,18 @@ def interpolate_with_delta(line: LineString, delta, distances=None) -> List:
 def get_pts_on_orthogonal_line_and_orthogonal_line(
     pt1: Point, pt2: Point, road_width: float
 ) -> LineString:
+    """
+    Get a LineString representing points on an orthogonal line offset by a given road width.
+
+    Args:
+        pt1 (Point): The first Point to define the orthogonal line.
+        pt2 (Point): The second Point to define the orthogonal line.
+        road_width (float): The road width for offset.
+
+    Returns:
+        LineString: A LineString representing points on an orthogonal line offset by the road width.
+    """
+
     ab = LineString([pt1, pt2])
     return LineString(
         [
@@ -73,7 +133,19 @@ def get_pts_on_orthogonal_line_and_orthogonal_line(
     )
 
 
-def extrapolate(p1: Point, p2: Point, ratio=15):
+def extrapolate(p1: Point, p2: Point, ratio: int = 15) -> LineString:
+    """
+    Extrapolate a LineString between two points based on a given ratio.
+
+    Args:
+        p1 (Point): The first Point.
+        p2 (Point): The second Point.
+        ratio (int, optional): The extrapolation ratio. Defaults to 15.
+
+    Returns:
+        LineString: The extrapolated LineString.
+    """
+
     p1 = mapping(p1)["coordinates"]
     p2 = mapping(p2)["coordinates"]
 
@@ -93,7 +165,17 @@ def extrapolate(p1: Point, p2: Point, ratio=15):
     return LineString([a, b])
 
 
-def is_orientation_clockwise(co_ords: np.ndarray):
+def is_orientation_clockwise(co_ords: np.ndarray) -> bool:
+    """
+    Check if the orientation of coordinates is clockwise.
+
+    Args:
+        co_ords (np.ndarray): Array of coordinates.
+
+    Returns:
+        bool: True if the orientation is clockwise, False otherwise.
+    """
+
     # https://github.com/shapely/shapely/blob/main/shapely/algorithms/cga.py
     xs, ys = co_ords[:, 0].tolist(), co_ords[:, 1].tolist()
     xs.append(xs[1])

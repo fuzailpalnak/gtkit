@@ -10,10 +10,16 @@ from py_gis_utility.helper import (
 
 def angle_between_vector(v1: tuple, v2: tuple):
     """
+    Calculate the angle in radians between two vectors.
+
+    Args:
+        v1 (np.ndarray): The first vector.
+        v2 (np.ndarray): The second vector.
+
+    Returns:
+        float: The angle in radians between the two vectors.
+
     two vectors have either the same direction -  https://stackoverflow.com/a/13849249/71522
-    :param v1:
-    :param v2:
-    :return:
     """
     v1_u = unit_vector(v1)
     v2_u = unit_vector(v2)
@@ -22,24 +28,42 @@ def angle_between_vector(v1: tuple, v2: tuple):
 
 def vector(p1: np.ndarray, p2: np.ndarray) -> np.ndarray:
     """
+    Calculate the vector between two points.
 
-    :param p1:
-    :param p2:
-    :return:
+    Args:
+        p1 (np.ndarray): The first point.
+        p2 (np.ndarray): The second point.
+
+    Returns:
+        np.ndarray: The vector between the two points.
     """
     return np.subtract(p1, p2)
 
 
 def magnitude(vec: np.ndarray, axis=-1) -> np.ndarray:
+    """
+    Calculate the magnitude of a vector.
+
+    Args:
+        vec (np.ndarray): The vector.
+        axis (int, optional): The axis along which to calculate the magnitude. Defaults to -1.
+
+    Returns:
+        np.ndarray: The magnitude of the vector.
+    """
     return np.linalg.norm(vec, axis=axis)
 
 
 def unit_vector(vec: np.ndarray, axis=-1) -> np.ndarray:
     """
+    Calculate the unit vector of a vector.
 
-    :param axis:
-    :param vec:
-    :return: unit vector
+    Args:
+        vec (np.ndarray): The vector.
+        axis (int, optional): The axis along which to calculate the unit vector. Defaults to -1.
+
+    Returns:
+        np.ndarray: The unit vector of the input vector.
     """
     return np.divide(
         vec, np.concatenate([magnitude(vec, axis)[:, :, np.newaxis]] * 2, axis=axis)
@@ -67,9 +91,16 @@ def euclidean_between_two_sets(
 
     resulting in shape of [n_coordinates_a, n_coordinates_b]
 
-    :param coordinates_a: array of shape [n_coordinates_a, 2]
-    :param coordinates_b: array of shape [n_coordinates_b, 2]
-    :return: array of shape [n_coordinates_a, n_coordinates_b]
+    Calculate the Euclidean distances between two sets of coordinates.
+
+    Args:
+        coordinates_a (np.ndarray): The first set of coordinates.
+        coordinates_b (np.ndarray): The second set of coordinates.
+
+    Returns:
+        np.ndarray: The distances between coordinates_b and each coordinate in coordinates_a.
+
+
     """
 
     assert (
@@ -110,8 +141,14 @@ def euclidean(coordinates_a: np.ndarray) -> np.ndarray:
 
     resulting in shape of [n_coordinates_a, n_coordinates_a]
 
-    :param coordinates_a: array of shape [n_coordinates_a, 2]
-    :return: array of shape [n_coordinates_a, n_coordinates_a]
+    Calculate the Euclidean distances between points in a set of coordinates.
+
+    Args:
+        coordinates_a (np.ndarray): The set of coordinates.
+
+    Returns:
+        np.ndarray: The distances between points in the same set of coordinates.
+
     """
     assert type(coordinates_a) is np.ndarray, (
         "Expected to have input type 'np.ndarray'" "got %s",
@@ -135,7 +172,22 @@ def perpendicular_distance_from_point_to_line_segment_in_2d(
     The function will compute perpendicular distance for the coordinates value present in coordinates to the given
     input line segment
 
-    :param line_segment: array of shape [number_of_line_segments, 2, 2]
+    if single line segment is passed for computation, i.e. input with dim [1, 2, 2] then expect the output in
+        format:
+            | distance from line_Segment_1 to coordinate[0]  .... | .... distance from line_Segment_1 to coordinate[n] |
+
+        if multiple line segments are passed for computation, i.e. input with dim [n_segments, 2, 2] then expect
+         the output in format:
+            | distance from line_Segment_1 to coordinate[0]  ....  | ... distance from line_Segment_1 to coordinate[n] |
+            | distance from line_Segment_2 to coordinate[0]  ....  | ... distance from line_Segment_2 to coordinate[n] |
+            ....
+            ...
+            | distance from line_Segment_n to coordinate[0]  ....  | ...distance from line_Segment_n to coordinate[n] |
+
+    Calculate the perpendicular distances from points to line segments in 2D.
+
+    Args:
+        line_segment (np.ndarray): array of shape [number_of_line_segments, 2, 2]
 
             If the  line segment to which perpendicular distances are to be computed then pass it as
             follows :
@@ -155,20 +207,10 @@ def perpendicular_distance_from_point_to_line_segment_in_2d(
                                                                         [end_line_segment_n_x,   end_line_segment_n_y]
                                                                         ],
                                                                     ]
-    :param coordinates: array of shape [number of points, 2]
-    :return: array of shape [number of segments, number of points]
+        coordinates (np.ndarray): array of shape [number of points, 2]
 
-    if single line segment is passed for computation, i.e. input with dim [1, 2, 2] then expect the output in
-        format:
-            | distance from line_Segment_1 to coordinate[0]  .... | .... distance from line_Segment_1 to coordinate[n] |
-
-        if multiple line segments are passed for computation, i.e. input with dim [n_segments, 2, 2] then expect
-         the output in format:
-            | distance from line_Segment_1 to coordinate[0]  ....  | ... distance from line_Segment_1 to coordinate[n] |
-            | distance from line_Segment_2 to coordinate[0]  ....  | ... distance from line_Segment_2 to coordinate[n] |
-            ....
-            ...
-            | distance from line_Segment_n to coordinate[0]  ....  | ...distance from line_Segment_n to coordinate[n] |
+    Returns:
+        np.ndarray: Perpendicular distances from each point to each line segment, array of shape [number of segments, number of points].
 
     """
 
@@ -223,7 +265,10 @@ def new_perpendicular_point_to_line_segment(
     """
     Get perpendicular point with reference to start and end point of the segment
 
-    :param line_segment: array of shape [number_of_line_segments, 2, 2]
+    Calculate new perpendicular points on line segments at a certain distance from the line.
+
+    Args:
+        line_segment (np.ndarray): array of shape [number_of_line_segments, 2, 2]
 
             If the line segment to which perpendicular distances are to be computed then pass it as
             follows :
@@ -243,8 +288,11 @@ def new_perpendicular_point_to_line_segment(
                                                                         [end_line_segment_n_x,   end_line_segment_n_y]
                                                                         ],
                                                                     ]
-    :param distance_from_the_line: how far the new point to create from the reference
-    :return:(perpendicular points with reference to start, perpendicular points with reference to end)
+        distance_from_the_line (np.ndarray): Distances from the line.
+
+    Returns:
+        np.ndarray: New perpendicular points calculated at the specified distances from the line,
+        (perpendicular points with reference to start, perpendicular points with reference to end)
             -
                 return is of shape [number_of_segments, 2, 2]
 
@@ -259,7 +307,7 @@ def new_perpendicular_point_to_line_segment(
                     A_n - perpendicular_with_start[segment_index_value_n, 0, :]
                     B_n - perpendicular_with_start[segment_index_value_n, 1, :]
                     C_n - perpendicular_with_end[segment_index_value_n, 0, :]
-                    D_n - perpendicular_with_end[segment_index_value_n, 1, :]
+                    D_n - perpendicular_with_end[segment_index_value_n, 1, :].
 
     """
     assert (
@@ -352,7 +400,10 @@ def new_coordinate_based_on_angle_and_distance(
 
     # https://math.stackexchange.com/questions/39390/determining-end-coordinates-of-line-with-the-specified-length-and-angle
 
-    :param points: array of shape [number_of_line_segments, 1, 2]
+    Calculate new coordinates based on an angle and a distance from the input points.
+
+    Args:
+        points (np.ndarray): array of shape [number_of_line_segments, 1, 2]
             If the line segment to which perpendicular distances are to be computed then pass it as
             follows :
                 -- the dimension [number_of_points, 1, 2] are [
@@ -368,9 +419,12 @@ def new_coordinate_based_on_angle_and_distance(
                                                                         [point_n_x, point_n_y],
                                                                         ],
                                                                     ]
-    :param angle: array of shape [number_of_points, 1, 1]
-    :param distance: array of shape [number_of_points, 1, 1]
-    :return:
+        angle (np.ndarray): array of shape [number_of_points, 1, 1]
+        distance (np.ndarray): array of shape [number_of_points, 1, 1]
+
+    Returns:
+        np.ndarray: New coordinates calculated from the given points, angles, and distances.
+
     """
     assert (
         type(points) is np.ndarray
@@ -417,9 +471,10 @@ def new_point_after_certain_distance(
     https://math.stackexchange.com/questions/175896/finding-a-point-along-a-line-a-certain-distance-away-from-another-point
     https://math.stackexchange.com/a/426810
 
-    :param distance_from_start: array specifying the distance to compute the point
-            shape [number_of_line_segments, 1, 1] or [1, 1]
-    :param line_segments: array of shape [number_of_line_segments, 2, 2]
+    Calculate new points along line segments at a certain distance from the start points.
+
+    Args:
+        line_segments (np.ndarray): array of shape [number_of_line_segments, 2, 2]
 
             If the line segment to which perpendicular distances are to be computed then pass it as
             follows :
@@ -439,7 +494,11 @@ def new_point_after_certain_distance(
                                                                         [end_line_segment_n_x,   end_line_segment_n_y]
                                                                         ],
                                                                     ]
-    :return: points on the line segment with distance 'd'
+        distance_from_start (np.ndarray): array specifying the distance to compute the point
+            shape [number_of_line_segments, 1, 1] or [1, 1]
+
+    Returns:
+        np.ndarray: New points calculated at the specified distances from the start points of the line segments.
 
     """
     assert (
