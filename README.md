@@ -17,4 +17,14 @@
             II. <a href="tutorials/bitmapToShp.ipynb">Generate Shp From Bitmap</a>.
         </td>
     </tr>
+    <tr>
+        <th>A.</th>
+        <td>
+            I. <a href="tutorials/shp2Mesh.ipynb">Generate mesh around a line string</a>.
+        </td>
+        <td rowspan="2">
+            <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/ea348f2b-89a0-41aa-af42-0c21e7ab6c64" alt="alt text" width="256" height="256">
+        </td>
+    </tr>
+
 </table>
