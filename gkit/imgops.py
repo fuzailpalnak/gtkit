@@ -10,7 +10,7 @@ from rasterio.features import shapes
 from rasterio.io import BufferedDatasetWriter, DatasetWriter
 from shapely.geometry import shape
 
-from gkit.mesh import create_mesh
+from gkit.mesh import create_mesh_using_img_param
 from gkit.utils import (
     get_pixel_resolution,
     get_affine_transform,
@@ -55,7 +55,7 @@ def bitmap_gen(
     Yields:
         Generator[Bitmap, None, None]: A generator yielding Bitmap instances.
     """
-    mesh = create_mesh(
+    mesh = create_mesh_using_img_param(
         bounds,
         output_image_size,
         pixel_resolution,
@@ -67,7 +67,7 @@ def bitmap_gen(
         (intermediate_bitmap, geometry_collection), axis=0
     )
 
-    for grid in mesh.extent():
+    for grid in mesh.mesh():
         transform = get_affine_transform(
             grid["extent"][0],
             grid["extent"][-1],
@@ -113,7 +113,9 @@ def geomultiband(
     dst_ds.FlushCache()
 
 
-def geowrite(save_path: str, image: np.ndarray, transform: affine.Affine, crs: str = None):
+def geowrite(
+    save_path: str, image: np.ndarray, transform: affine.Affine, crs: str = None
+):
     """
     Write a GeoTIFF file using the rasterio library.
 
@@ -134,7 +136,7 @@ def geowrite(save_path: str, image: np.ndarray, transform: affine.Affine, crs: s
         width=image.shape[0],
         height=image.shape[1],
         transform=transform,
-        crs=crs
+        crs=crs,
     ) as dst:
         dst.write(image, indexes=1)
 
@@ -152,7 +154,7 @@ def georead(
         Union[BufferedDatasetWriter, DatasetWriter]: The opened rasterio dataset.
     """
 
-    return rasterio.open(path, 'r+')
+    return rasterio.open(path, "r+")
 
 
 def shp_gen(
