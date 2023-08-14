@@ -12,7 +12,7 @@ from affine import Affine
 from gkit.geomops import get_reference_shift
 from typing import Union, Tuple, Generator, List
 
-from gkit.imgops import (
+from gkit.imutils import (
     get_pixel_resolution,
     get_affine_transform,
     compute_bounds,
