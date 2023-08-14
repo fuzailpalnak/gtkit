@@ -1,6 +1,5 @@
 import numpy as np
 import math
-import rasterio
 import affine
 
 from dataclasses import dataclass
@@ -9,31 +8,16 @@ from shapely.geometry import Point, LineString, MultiLineString, Polygon
 from shapely.ops import polygonize, linemerge, unary_union
 
 from affine import Affine
-from rasterio.transform import rowcol
-from rasterio.warp import transform_bounds
 
 from gkit.geomops import get_reference_shift
-from typing import Tuple, Dict, Union, Tuple, Generator, List
+from typing import Union, Tuple, Generator, List
 
-
-def get_window(
-    extent: Tuple[float, float, float, float], transform: Affine
-) -> Tuple[Tuple[int, int], Tuple[int, int]]:
-    """
-    Calculate the row and column window indices for the given extent and affine transform.
-
-    Parameters:
-        extent (tuple): A tuple representing the extent (xmin, ymin, xmax, ymax) of the window.
-        transform (Affine): An affine transformation matrix.
-
-    Returns:
-        tuple: A tuple containing the row and column window indices as (row_indices, col_indices).
-    """
-
-    row_start, col_start = rowcol(transform, extent[0], extent[-1], op=int)
-    row_stop, col_stop = rowcol(transform, extent[2], extent[1], op=int)
-
-    return (row_start, row_stop), (col_start, col_stop)
+from gkit.imgops import (
+    get_pixel_resolution,
+    get_affine_transform,
+    compute_bounds,
+    get_window,
+)
 
 
 def get_mesh_transform(width: int, height: int, transform: Affine) -> Affine:
@@ -54,116 +38,6 @@ def get_mesh_transform(width: int, height: int, transform: Affine) -> Affine:
         bounds[0], bounds[-1], *get_pixel_resolution(transform)
     )
     return mesh_transform
-
-
-def get_affine_transform(
-    min_x: float, max_y: float, pixel_width: float, pixel_height: float
-) -> Affine:
-    """
-    Generate an affine transformation matrix based on translation and scaling.
-
-    Parameters:
-        min_x (float): Minimum x-coordinate value.
-        max_y (float): Maximum y-coordinate value.
-        pixel_width (float): Pixel width.
-        pixel_height (float): Pixel height.
-
-    Returns:
-        Affine: The generated affine transformation matrix.
-    """
-
-    return Affine.translation(min_x, max_y) * Affine.scale(pixel_width, -pixel_height)
-
-
-def compute_bounds(
-    width: int, height: int, transform: Affine
-) -> Tuple[float, float, float, float]:
-    """
-    Compute the bounds of an array using its dimensions and affine transformation.
-
-    Parameters:
-        width (int): Width of the array.
-        height (int): Height of the array.
-        transform (Affine): An affine transformation matrix.
-
-    Returns:
-        tuple: A tuple containing the computed bounds (xmin, ymin, xmax, ymax).
-    """
-
-    bounds = rasterio.transform.array_bounds(height, width, transform)
-    return bounds
-
-
-def geo_transform_to_26190(
-    width: int, height: int, bounds: Tuple[float, float, float, float], crs: Dict
-) -> Affine:
-    """
-    Transform geographic coordinates to EPSG:26910 (NAD83 UTM Zone 10N) coordinates.
-
-    Parameters:
-        width (int): Width of the array.
-        height (int): Height of the array.
-        bounds (tuple): A tuple representing the bounds (xmin, ymin, xmax, ymax).
-        crs (dict): Coordinate Reference System of the input coordinates.
-
-    Returns:
-        Affine: The affine transformation matrix for the EPSG:26910 coordinates.
-    """
-
-    west, south, east, north = transform_bounds(crs, {"init": "epsg:26910"}, *bounds)
-    return rasterio.transform.from_bounds(west, south, east, north, width, height)
-
-
-def re_project_crs_to_26190(
-    bounds: Tuple[float, float, float, float], from_crs: Dict
-) -> Tuple[float, float, float, float]:
-    """
-    Reproject bounds from a given CRS to EPSG:26910 (NAD83 UTM Zone 10N).
-
-    Parameters:
-        bounds (tuple): A tuple representing the bounds (xmin, ymin, xmax, ymax).
-        from_crs (dict): Source Coordinate Reference System.
-
-    Returns:
-        tuple: Reprojected bounds in EPSG:26910 coordinates as (west, south, east, north).
-    """
-
-    west, south, east, north = transform_bounds(
-        from_crs, {"init": "epsg:26910"}, *bounds
-    )
-    return west, south, east, north
-
-
-def re_project_from_26190(
-    bounds: Tuple[float, float, float, float], to_crs: Dict
-) -> Tuple[float, float, float, float]:
-    """
-    Reproject bounds from EPSG:26910 (NAD83 UTM Zone 10N) to a target CRS.
-
-    Parameters:
-        bounds (tuple): A tuple representing the bounds (xmin, ymin, xmax, ymax).
-        to_crs (dict): Target Coordinate Reference System.
-
-    Returns:
-        tuple: Reprojected bounds in the target CRS as (west, south, east, north).
-    """
-
-    west, south, east, north = transform_bounds({"init": "epsg:26910"}, to_crs, *bounds)
-    return west, south, east, north
-
-
-def get_pixel_resolution(transform: Affine) -> Tuple[float, float]:
-    """
-    Get the pixel resolution from an affine transformation matrix.
-
-    Parameters:
-        transform (Affine): An affine transformation matrix.
-
-    Returns:
-        tuple: The pixel resolution as (pixel_width, pixel_height).
-    """
-
-    return transform[0], -transform[4]
 
 
 def compute_num_of_col_and_rows(
