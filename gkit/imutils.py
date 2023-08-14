@@ -77,4 +77,3 @@ def get_pixel_resolution(transform: affine.Affine) -> Tuple[float, float]:
     """
 
     return transform[0], -transform[4]
-
