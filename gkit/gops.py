@@ -121,7 +121,7 @@ def interpolate_with_delta(
 
 
 def get_pts_on_orthogonal_line_and_orthogonal_line(
-    pt1: Point, pt2: Point, road_width: float
+    pt1: Point, pt2: Point, width: float
 ) -> LineString:
     """
     Get a LineString representing points on an orthogonal line offset by a given road width.
@@ -129,7 +129,7 @@ def get_pts_on_orthogonal_line_and_orthogonal_line(
     Args:
         pt1 (Point): The first Point to define the orthogonal line.
         pt2 (Point): The second Point to define the orthogonal line.
-        road_width (float): The road width for offset.
+        width (float): The road width for offset.
 
     Returns:
         LineString: A LineString representing points on an orthogonal line offset by the road width.
@@ -138,8 +138,8 @@ def get_pts_on_orthogonal_line_and_orthogonal_line(
     ab = LineString([pt1, pt2])
     return LineString(
         [
-            ab.parallel_offset(road_width / 2, "left").boundary[1],
-            ab.parallel_offset(road_width / 2, "right").boundary[0],
+            ab.parallel_offset(width / 2, "left").boundary[1],
+            ab.parallel_offset(width / 2, "right").boundary[0],
         ]
     )
 

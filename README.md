@@ -58,7 +58,7 @@ GTKit's modular structure allows you to import specific functionalities as neede
         </td>
     </tr>
     <tr>
-        <th>A.</th>
+        <th>B.</th>
         <td>
             I. <a href="tutorials/shp2Mesh.ipynb">Generate mesh around a line string</a>.
         </td>
@@ -66,7 +66,15 @@ GTKit's modular structure allows you to import specific functionalities as neede
             <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/ea348f2b-89a0-41aa-af42-0c21e7ab6c64" alt="alt text" width="256" height="256">
         </td>
     </tr>
-
+<tr>
+        <th>C.</th>
+        <td>
+            I. <a href="tutorials/lineOps.ipynb">Some geometry Operations</a>.
+        </td>
+        <td rowspan="2">
+            <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/917955bd-36d9-4ac0-9f98-92d36924b8ba" alt="alt text" width="256" height="256">
+        </td>
+    </tr>
 </table>
 
 
