@@ -2,10 +2,11 @@
 
 # GTKit - GIS Toolkit
 
-GTKit (GIS Toolkit) is a comprehensive library designed to streamline your GIS 
-(Geographic Information System) data manipulation and analysis tasks. 
-Whether you're dealing with geometry, GeoDataFrames, images, or mathematical operations,
+GTKit (GIS Toolkit) is a library designed to streamline GIS 
+(Geographic Information System) releated tasks. 
+Whether it is geometry, GeoDataFrames, images, or mathematical operations,
 GTKit provides a set of commonly used methods and operations to simplify your workflow.
+This utility has been curated to include some of the regularly used methods and operations that I, frequently employ.
 
 ## Features
 
