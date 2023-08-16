@@ -45,38 +45,32 @@ GTKit's modular structure allows you to import specific functionalities as neede
     <tr>
         <th>A.</th>
         <td>
-            I. <a href="tutorials/shpToBitmap.ipynb">Generate Bitmap From Shp</a>.
+            <a href="tutorials/shpToBitmap.ipynb">Generate Bitmap From Shp</a>.</br>
+            <a href="tutorials/bitmapToShp.ipynb">Generate Shp From Bitmap</a>.
         </td>
-        <td rowspan="2">
-            <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/c6927658-2911-49fd-ab57-e387a6554513" alt="alt text" width="256" height="256">
-        </td>
-    </tr>
-    <tr>
-        <th></th>
         <td>
-            II. <a href="tutorials/bitmapToShp.ipynb">Generate Shp From Bitmap</a>.
+            <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/c6927658-2911-49fd-ab57-e387a6554513" alt="alt text" width="256" height="256">
         </td>
     </tr>
     <tr>
         <th>B.</th>
         <td>
-            I. <a href="tutorials/shp2Mesh.ipynb">Generate mesh around a line string</a>.
+            <a href="tutorials/shp2Mesh.ipynb">Generate mesh around a line string</a>.
         </td>
-        <td rowspan="2">
+        <td>
             <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/ea348f2b-89a0-41aa-af42-0c21e7ab6c64" alt="alt text" width="256" height="256">
         </td>
     </tr>
-<tr>
+    <tr>
         <th>C.</th>
         <td>
-            I. <a href="tutorials/lineOps.ipynb">Some geometry Operations</a>.
+            <a href="tutorials/lineOps.ipynb">Some geometry Operations</a>.
         </td>
-        <td rowspan="2">
+        <td>
             <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/917955bd-36d9-4ac0-9f98-92d36924b8ba" alt="alt text" width="256" height="256">
         </td>
     </tr>
 </table>
-
 
 [comment]: <> (## Documentation)
 
