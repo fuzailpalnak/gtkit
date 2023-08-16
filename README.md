@@ -1,6 +1,45 @@
-# gtkit
 
-## 1. Tutorials
+
+# GTKit - GIS Toolkit
+
+GTKit (GIS Toolkit) is a comprehensive library designed to streamline your GIS 
+(Geographic Information System) data manipulation and analysis tasks. 
+Whether you're dealing with geometry, GeoDataFrames, images, or mathematical operations,
+GTKit provides a set of commonly used methods and operations to simplify your workflow.
+
+## Features
+
+GTKit offers a range of functionalities to assist you in working with GIS data effectively:
+
+- **Geometry Operations**: Perform various geometry-based operations such as splitting a LineString, line referencing,
+interpolation, extrapolation
+
+- **GeoDataFrame Manipulation**
+- **Image Processing**: Convert images to geometries, Generate Geometries from binary geo referenced mask
+- **Mesh Creation**: Create Mesh either using images or using LineString.
+
+[comment]: <> (## Installation)
+
+[comment]: <> (You can install GTKit using `pip`:)
+
+[comment]: <> (```bash)
+
+[comment]: <> (pip install gtkit)
+
+[comment]: <> (```)
+
+## Usage
+
+Import GTKit in your Python script or notebook:
+
+```python
+import gtkit
+```
+
+GTKit's modular structure allows you to import specific functionalities as needed for your project.
+
+### Examples
+
 <table>
     <tr>
         <th>A.</th>
@@ -28,3 +67,23 @@
     </tr>
 
 </table>
+```
+
+[comment]: <> (## Documentation)
+
+[comment]: <> (For detailed information on available methods, classes, and their usage, refer to the [GTKit Documentation]&#40;https://gtkit-docs.example.com&#41;.)
+
+[comment]: <> (## Contributing)
+
+[comment]: <> (We welcome contributions from the GIS community! If you'd like to contribute to GTKit, please refer to our [Contribution Guidelines]&#40;https://gtkit-docs.example.com/contributing&#41; for more information.)
+
+[comment]: <> (## License)
+
+[comment]: <> (GTKit is released under the [MIT License]&#40;https://opensource.org/licenses/MIT&#41;.)
+
+[comment]: <> (## Contact)
+
+[comment]: <> (Have questions or suggestions? Feel free to contact us at `contact@example.com`.)
+
+---
+

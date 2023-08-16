@@ -9,7 +9,7 @@ from shapely.ops import polygonize, linemerge, unary_union
 
 from affine import Affine
 
-from gkit.geomops import get_reference_shift
+from gkit.gops import get_reference_shift
 from typing import Union, Tuple, Generator, List
 
 from gkit.imutils import (

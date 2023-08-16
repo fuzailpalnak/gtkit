@@ -1,10 +1,18 @@
+from itertools import tee
 from typing import Union, Tuple, List, Dict
 
 import numpy as np
 import rasterio
 from affine import Affine
 from rasterio.warp import transform_bounds
-from shapely.geometry import LineString, Point, MultiLineString, mapping
+from shapely import wkb
+from shapely.geometry import LineString, Point, MultiLineString, mapping, Polygon
+
+
+def pairwise(iterable):
+    a, b = tee(iterable)
+    next(b, None)
+    return zip(a, b)
 
 
 def cut(line: LineString, dist: float) -> Tuple[LineString, LineString]:
@@ -244,3 +252,65 @@ def re_project_from_26190(
 
     west, south, east, north = transform_bounds({"init": "epsg:26910"}, to_crs, *bounds)
     return west, south, east, north
+
+
+def centroid_with_z(geom: Polygon) -> Point:
+    """
+    Calculate the centroid of a 3D polygon.
+
+    Args:
+        geom (Polygon): The input 3D polygon geometry.
+
+    Returns:
+        Point: The 3D centroid point.
+    """
+    co_ords = mapping(geom)["coordinates"]
+    x = np.average(np.array(co_ords)[0][:, 0])
+    y = np.average(np.array(co_ords)[0][:, 1])
+    z = np.average(np.array(co_ords)[0][:, 2])
+
+    return Point(x, y, z)
+
+
+def reverse_geom(geom):
+    """
+    Reverse the coordinates of a geometry.
+
+    Args:
+        geom: The input geometry.
+
+    Returns:
+        Tuple: The reversed coordinates tuple.
+    """
+
+    def _reverse(x, y, z=None):
+        if z:
+            return x[::-1], y[::-1], z[::-1]
+        return x[::-1], y[::-1]
+
+
+def convert_3d_2d(geometry):
+    """
+    Convert a 3D geometry to a 2D geometry.
+
+    Args:
+        geometry: The input geometry.
+
+    Returns:
+        Geometry: The converted 2D geometry.
+    """
+
+    return wkb.loads(wkb.dumps(geometry, output_dimension=2))
+
+
+def midpoint(line: LineString) -> Point:
+    """
+    Calculate the midpoint of a LineString.
+
+    Args:
+        line (LineString): The input LineString geometry.
+
+    Returns:
+        Point: The midpoint point of the LineString.
+    """
+    return line.interpolate(line.length / 2)
