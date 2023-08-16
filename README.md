@@ -68,7 +68,7 @@ GTKit's modular structure allows you to import specific functionalities as neede
     </tr>
 
 </table>
-```
+
 
 [comment]: <> (## Documentation)
 
@@ -86,5 +86,5 @@ GTKit's modular structure allows you to import specific functionalities as neede
 
 [comment]: <> (Have questions or suggestions? Feel free to contact us at `contact@example.com`.)
 
----
+
 
