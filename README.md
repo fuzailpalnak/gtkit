@@ -32,7 +32,7 @@ External dependencies
 1. Create conda env
 
 ```bash
-conda env create --name gtkit --file=environment.yml
+conda env create --name gtkit --file=env.yml
 conda activate gtkit
 ```
 
