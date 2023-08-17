@@ -49,7 +49,7 @@ GTKit's modular structure allows you to import specific functionalities as neede
             <a href="tutorials/bitmapToShp.ipynb">Generate Shp From Bitmap</a>.
         </td>
         <td>
-            <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/c6927658-2911-49fd-ab57-e387a6554513" alt="alt text" width="256" height="256">
+            <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/880d07c9-3d77-448a-99a7-9fd1b6d873fb" alt="alt text" width="256" height="256">
         </td>
     </tr>
     <tr>
@@ -58,7 +58,7 @@ GTKit's modular structure allows you to import specific functionalities as neede
             <a href="tutorials/shp2Mesh.ipynb">Generate mesh around a line string</a>.
         </td>
         <td>
-            <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/ea348f2b-89a0-41aa-af42-0c21e7ab6c64" alt="alt text" width="256" height="256">
+            <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/050e2df5-79c3-4d65-ad8a-d19d0ee9feb8" alt="alt text" width="256" height="256">
         </td>
     </tr>
     <tr>
@@ -67,7 +67,7 @@ GTKit's modular structure allows you to import specific functionalities as neede
             <a href="tutorials/lineOps.ipynb">Some geometry Operations</a>.
         </td>
         <td>
-            <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/917955bd-36d9-4ac0-9f98-92d36924b8ba" alt="alt text" width="256" height="256">
+            <img src="https://github.com/fuzailpalnak/gtkit/assets/24665570/4b1ff8ae-6e62-4d92-b7fa-694591ea05f9" alt="alt text" width="256" height="256">
         </td>
     </tr>
 </table>
