@@ -12,7 +12,7 @@ build:
     python: "mambaforge-4.10"
   jobs:
     pre_create_environment:
-       - conda update --yes --quiet --name=base --channel=defaults conda
+       - conda update --yes --quiet --nam latest --file docs/conda_environment.yml
 
 conda:
   environment: docs/environment.yml
