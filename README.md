@@ -86,9 +86,9 @@ GTKit's modular structure allows you to import specific functionalities as neede
     </tr>
 </table>
 
-[comment]: <> (## Documentation)
+## Documentation
 
-[comment]: <> (For detailed information on available methods, classes, and their usage, refer to the [GTKit Documentation]&#40;https://gtkit-docs.example.com&#41;.)
+For detailed information on available methods, classes, and their usage, refer to the [GTKit Documentation](https://gtkit.readthedocs.io).
 
 [comment]: <> (## Contributing)
 
