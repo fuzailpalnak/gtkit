@@ -10,7 +10,7 @@ from rasterio.features import shapes
 from rasterio.io import BufferedDatasetWriter, DatasetWriter
 from shapely.geometry import shape
 
-from gkit.mesh import create_mesh_using_img_param
+from gtkit.mesh import create_mesh_using_img_param
 
 
 @dataclass

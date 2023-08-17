@@ -1,11 +1,157 @@
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 
-from py_gis_utility.helper import (
-    is_line_segment_3d,
-    is_value_3d,
-    is_point_3d,
-)
+
+def _is_input_3d(input_array: np.ndarray) -> bool:
+    """
+    Check if the input NumPy array is 3-dimensional.
+
+    Args:
+        input_array (np.ndarray): The input NumPy array.
+
+    Returns:
+        bool: True if the input array is 3-dimensional, False otherwise.
+    """
+    return True if input_array.ndim == 3 else False
+
+
+def _is_input_2d(input_array: np.ndarray) -> bool:
+    """
+    Check if the input NumPy array is 2-dimensional.
+
+    Args:
+        input_array (np.ndarray): The input NumPy array.
+
+    Returns:
+        bool: True if the input array is 2-dimensional, False otherwise.
+    """
+    return True if input_array.ndim == 2 else False
+
+
+def _is_line_segment(input_array: np.ndarray) -> bool:
+    """
+    Check if the input NumPy array represents a line segment.
+
+    Args:
+        input_array (np.ndarray): The input NumPy array.
+
+    Returns:
+        bool: True if the input array represents a line segment, False otherwise.
+    """
+    return True if ((input_array.shape[-2], input_array.shape[-1]) == (2, 2)) else False
+
+
+def _is_value(input_array: np.ndarray) -> bool:
+    """
+    Check if the input NumPy array represents a single value.
+
+    Args:
+        input_array (np.ndarray): The input NumPy array.
+
+    Returns:
+        bool: True if the input array represents a single value, False otherwise.
+    """
+
+    return True if ((input_array.shape[-2], input_array.shape[-1]) == (1, 1)) else False
+
+
+def _is_point(input_array: np.ndarray) -> bool:
+    """
+    Check if the input NumPy array represents a 2D point.
+
+    Args:
+        input_array (np.ndarray): The input NumPy array.
+
+    Returns:
+        bool: True if the input array represents a 2D point, False otherwise.
+    """
+    return True if ((input_array.shape[-2], input_array.shape[-1]) == (1, 2)) else False
+
+
+def _is_line_segment_3d(line_segments: np.ndarray) -> bool:
+    """
+    Check if the 3D NumPy array represents 3D line segments.
+
+    Args:
+        line_segments (np.ndarray): The 3D NumPy array.
+
+    Returns:
+        bool: True if the 3D array represents 3D line segments, False otherwise.
+    """
+    return (
+        True
+        if (_is_input_3d(line_segments) and _is_line_segment(line_segments))
+        else False
+    )
+
+
+def _is_value_3d(values: np.ndarray) -> bool:
+    """
+    Check if the 3D NumPy array represents 3D values.
+
+    Args:
+        values (np.ndarray): The 3D NumPy array.
+
+    Returns:
+        bool: True if the 3D array represents 3D values, False otherwise.
+    """
+    return True if (_is_input_3d(values) and _is_value(values)) else False
+
+
+def _is_point_3d(points: np.ndarray) -> bool:
+    """
+    Check if the 3D NumPy array represents 3D points.
+
+    Args:
+        points (np.ndarray): The 3D NumPy array.
+
+    Returns:
+        bool: True if the 3D array represents 3D points, False otherwise.
+    """
+    return True if (_is_input_3d(points) and _is_point(points)) else False
+
+
+def _is_line_segment_2d(line_segments: np.ndarray) -> bool:
+    """
+    Check if the 2D NumPy array represents 2D line segments.
+
+    Args:
+        line_segments (np.ndarray): The 2D NumPy array.
+
+    Returns:
+        bool: True if the 2D array represents 2D line segments, False otherwise.
+    """
+    return (
+        True
+        if (_is_input_2d(line_segments) and _is_line_segment(line_segments))
+        else False
+    )
+
+
+def _is_value_2d(values: np.ndarray) -> bool:
+    """
+    Check if the 2D NumPy array represents 2D values.
+
+    Args:
+        values (np.ndarray): The 2D NumPy array.
+
+    Returns:
+        bool: True if the 2D array represents 2D values, False otherwise.
+    """
+    return True if (_is_input_2d(values) and _is_value(values)) else False
+
+
+def _is_point_2d(points: np.ndarray) -> bool:
+    """
+    Check if the 2D NumPy array represents 2D points.
+
+    Args:
+        points (np.ndarray): The 2D NumPy array.
+
+    Returns:
+        bool: True if the 2D array represents 2D points, False otherwise.
+    """
+    return True if (_is_input_2d(points) and _is_point(points)) else False
 
 
 def angle_between_vector(v1: tuple, v2: tuple):
@@ -228,7 +374,7 @@ def perpendicular_distance_from_point_to_line_segment_in_2d(
         f" {coordinates.ndim}"
     )
 
-    assert is_line_segment_3d(line_segment), (
+    assert _is_line_segment_3d(line_segment), (
         f"Expected line segments to be either '[n_line_segments, 2, 2]' for n_dim == 3"
         f"got {line_segment.shape} for n_dim == {line_segment.ndim}"
     )
@@ -317,12 +463,12 @@ def new_perpendicular_point_to_line_segment(
         f" and {type(distance_from_the_line)}"
     )
 
-    assert is_line_segment_3d(line_segment), (
+    assert _is_line_segment_3d(line_segment), (
         f"Expected line segments to be either '[n_line_segments, 2, 2]' for n_dim == 3 "
         f"got {line_segment.shape} for n_dim == {line_segment.ndim}"
     )
 
-    assert is_value_3d(distance_from_the_line), (
+    assert _is_value_3d(distance_from_the_line), (
         f"Expected values to be either '[n_values, 1, 1]' for n_dim == 3 or '[1, 1]' for n_dim == 2, "
         f"got {distance_from_the_line.shape} for n_dim == {distance_from_the_line.ndim}"
     )
@@ -435,15 +581,15 @@ def new_coordinate_based_on_angle_and_distance(
         f"got {type(points), type(distance), type(angle)}"
     )
 
-    assert is_point_3d(points), (
+    assert _is_point_3d(points), (
         f"Expected points to be either '[n_points, 1, 2]' for n_dim == 3 "
         f"got {points.shape} for n_dim == {points.ndim}"
     )
-    assert is_value_3d(angle), (
+    assert _is_value_3d(angle), (
         f"Expected values to be either '[n_values, 1, 1]' for n_dim == 3 "
         f"got {angle.shape} for n_dim == {angle.ndim}"
     )
-    assert is_value_3d(distance), (
+    assert _is_value_3d(distance), (
         f"Expected values to be either '[n_values, 1, 1]' "
         f"got {distance.shape} for n_dim == {distance.ndim}"
     )
@@ -505,7 +651,7 @@ def new_point_after_certain_distance(
         type(line_segments) is np.ndarray and type(distance_from_start) is np.ndarray
     ), f"Expected to have input type ['np.ndarray', 'np.ndarray'] got {type(line_segments), type(distance_from_start)}"
 
-    assert is_line_segment_3d(line_segments), (
+    assert _is_line_segment_3d(line_segments), (
         f"Expected line segments to be either '[n_values, 2, 2]' for n_dim == 3 "
         f"got {line_segments.shape} for n_dim == {line_segments.ndim}"
     )
@@ -514,7 +660,7 @@ def new_point_after_certain_distance(
         distance_from_start >= 0
     ), f"Expected distance_from_the_line to be  'non negative' got {distance_from_start}"
 
-    assert is_value_3d(distance_from_start), (
+    assert _is_value_3d(distance_from_start), (
         f"Expected values to be either '[n_values, 1, 1]' for n_dim == 3"
         f"got {distance_from_start.shape} for n_dim == {distance_from_start.ndim}"
     )

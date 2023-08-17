@@ -1,0 +1,7 @@
+affine==2.3.0
+numpy
+opencv-python
+pandas==1.5.3
+scikit-learn==1.2.1
+scipy>=1.6.2
+shapely~=1.8.0

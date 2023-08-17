@@ -4,7 +4,7 @@ import geopandas as gpd
 from shapely.geometry import box
 from sklearn.cluster import AgglomerativeClustering
 
-from gkit.gops import centroid_with_z, midpoint
+from gtkit.gops import centroid_with_z, midpoint
 
 
 def gpdread(inp_file: str) -> gpd.GeoDataFrame:

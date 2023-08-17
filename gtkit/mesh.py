@@ -9,10 +9,10 @@ from shapely.ops import polygonize, linemerge, unary_union
 
 from affine import Affine
 
-from gkit.gops import get_reference_shift
+from gtkit.gops import get_reference_shift
 from typing import Union, Tuple, Generator, List
 
-from gkit.imutils import (
+from gtkit.imutils import (
     get_pixel_resolution,
     get_affine_transform,
     compute_bounds,
