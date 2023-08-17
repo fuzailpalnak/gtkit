@@ -1,3 +1,4 @@
+![PyPI - Downloads](https://img.shields.io/pypi/dw/gtkit)
 
 
 # GTKit - GIS Toolkit
