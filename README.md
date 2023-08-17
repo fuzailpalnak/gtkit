@@ -19,15 +19,29 @@ interpolation, extrapolation
 - **Image Processing**: Convert images to geometries, Generate Geometries from binary geo referenced mask
 - **Mesh Creation**: Create Mesh either using images or using LineString.
 
-[comment]: <> (## Installation)
+## Installation with pip
 
-[comment]: <> (You can install GTKit using `pip`:)
+External dependencies
 
-[comment]: <> (```bash)
+- *_Geopandas - [installation](https://anaconda.org/conda-forge/geopandas)_*
+- *_Rasterio - [installation](https://anaconda.org/conda-forge/rasterio)_*
+- *_GDAL - [installation](https://anaconda.org/conda-forge/gdal)_*
+- *_Fiona -  [installation](https://anaconda.org/conda-forge/fiona)_*
+- *_Shapely -  [installation](https://anaconda.org/conda-forge/shapely)_*
 
-[comment]: <> (pip install gtkit)
+1. Create conda env
 
-[comment]: <> (```)
+```bash
+conda env create --name gtkit --file=environment.yml
+conda activate gtkit
+```
+
+2. Run:
+
+```bash
+pip install gtkit
+```
+
 
 ## Usage
 
