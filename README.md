@@ -1,9 +1,7 @@
 
 
 # GTKit - GIS Toolkit
-
-![PyPI - Downloads](https://img.shields.io/pypi/dw/gtkit)
-
+[![Downloads](https://static.pepy.tech/badge/gtkit)](https://pepy.tech/project/gtkit)
 
 GTKit (GIS Toolkit) is a library designed to streamline GIS 
 (Geographic Information System) releated tasks. 
