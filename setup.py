@@ -14,13 +14,13 @@ except FileNotFoundError:
 
 setup(
     name="gtkit",
-    version="0.1.0",
+    version="0.1.1",
     author="Fuzail Palnak",
     author_email="fuzailpalnak@gmail.com",
     url="https://github.com/fuzailpalnak/gtkit",
     description="A library designed to streamline GIS (Geographic Information System) related tasks."
-                " Whether it is geometry, GeoDataFrames, images, or mathematical operations, "
-                "GTKit provides a set of commonly used methods and operations to simplify your workflow.",
+    " Whether it is geometry, GeoDataFrames, images, or mathematical operations, "
+    "GTKit provides a set of commonly used methods and operations to simplify your workflow.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),

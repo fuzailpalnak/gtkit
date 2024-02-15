@@ -5,12 +5,165 @@ import affine
 import cv2
 import numpy as np
 import rasterio
+from image_fragment.fragment import Fragment, ImageFragment
 from osgeo import gdal, osr
 from rasterio.features import shapes
 from rasterio.io import BufferedDatasetWriter, DatasetWriter
 from shapely.geometry import shape
 
+from gtkit.imutils import get_pixel_resolution, get_affine_transform
 from gtkit.mesh import create_mesh_using_img_param
+
+
+class StitchNSplit:
+    """
+    Class for splitting images into smaller fragments.
+
+    Attributes:
+    split_size (tuple): Size of the fragments to split the image into.
+    img_size (tuple): Size of the original image.
+    image_fragment (ImageFragment): Image fragment object for managing fragments.
+    """
+
+    def __init__(self, split_size: tuple, img_size: tuple):
+        """
+        Initialize the Split class.
+
+        Parameters:
+        split_size (tuple): Size of the fragments to split the image into.
+        img_size (tuple): Size of the original image.
+
+        Raises:
+        ValueError: If the split size is greater than the image size.
+        """
+
+        if split_size[0] > img_size[0] or split_size[1] > img_size[1]:
+            raise ValueError(
+                "Size to Split Can't Be Greater than Image, Given {},"
+                " Expected <= {}".format(split_size, (img_size[0], img_size[1]))
+            )
+        self.split_size = split_size
+        self.img_size = img_size
+
+        self.image_fragment = ImageFragment.image_fragment_3d(
+            fragment_size=self.split_size, org_size=self.img_size
+        )
+
+    def __len__(self):
+        """
+        Get the number of fragments.
+
+        Returns:
+        int: Number of fragments.
+        """
+
+        return len(self.image_fragment.collection)
+
+    def __getitem__(self, index):
+        """
+        Get a fragment by index.
+
+        Parameters:
+        index (int): Index of the fragment.
+
+        Returns:
+        tuple: Index and the corresponding fragment.
+        """
+        return index, self.image_fragment.collection[index]
+
+    def split(
+        self, image: Union[BufferedDatasetWriter, DatasetWriter], fragment: Fragment
+    ):
+        """
+        Split the image using a windowing approach.
+
+        Parameters:
+        image (rasterio.io.DatasetReader): Input image dataset reader object.
+        fragment (Fragment): Fragment object specifying the region of interest.
+
+        Returns:
+        tuple: A tuple containing the extracted image data and additional keyword arguments.
+        """
+        raise NotImplementedError
+
+    def stitch(self, image: np.ndarray, stitched_image: np.ndarray, fragment: Fragment):
+        """
+        Stitch an image fragment onto a larger stitched image.
+
+        This method transfers the data from the provided image fragment onto the specified location
+        in the larger stitched image.
+
+        Parameters:
+        image (np.ndarray): The image fragment data to be stitched onto the larger image.
+        stitched_image (np.ndarray): The larger stitched image onto which the fragment will be stitched.
+        fragment (Fragment): The fragment specifying the region in the larger image where the fragment will be placed.
+
+        Returns:
+        np.ndarray: The stitched image with the fragment transferred onto it.
+        """
+        raise NotImplementedError
+
+
+class StitchNSplitGeo(StitchNSplit):
+    """
+    Subclass of Split specialized for geospatial image splitting.
+    """
+
+    def __init__(self, split_size: tuple, img_size: tuple):
+        """
+        Initialize the SplitGeo class.
+
+        Parameters:
+        split_size (tuple): Size of the fragments to split the image into.
+        img_size (tuple): Size of the original image.
+        """
+        super().__init__(split_size, img_size)
+
+    def split(
+        self, image: Union[BufferedDatasetWriter, DatasetWriter], fragment: Fragment
+    ) -> (np.ndarray, dict):
+        """
+        Internal method to extract data from a fragment of a geospatial image.
+
+        Parameters:
+        image (rasterio.io.DatasetReader): Input image dataset reader object.
+        fragment (Fragment): Fragment object specifying the region of interest.
+
+        Returns:
+        tuple: A tuple containing the extracted image data and additional keyword arguments.
+        """
+
+        split_image = image.read(window=fragment.position)
+
+        kwargs_split_image = image.meta.copy()
+        kwargs_split_image.update(
+            {
+                "height": self.split_size[0],
+                "width": self.split_size[1],
+                "transform": image.window_transform(fragment.position),
+            }
+        )
+
+        return split_image.swapaxes(0, 1).swapaxes(1, 2), kwargs_split_image
+
+    def stitch(self, image: np.ndarray, stitched_image: np.ndarray, fragment: Fragment):
+        """
+        Stitch an image fragment onto a larger stitched image.
+
+        This method transfers the data from the provided image fragment onto the specified location
+        in the larger stitched image.
+
+        Parameters:
+        image (np.ndarray): The image fragment data to be stitched onto the larger image.
+        stitched_image (np.ndarray): The larger stitched image onto which the fragment will be stitched.
+        fragment (Fragment): The fragment specifying the region in the larger image where the fragment will be placed.
+
+        Returns:
+        np.ndarray: The stitched image with the fragment transferred onto it.
+        """
+        return fragment.transfer_fragment(
+            transfer_from=image, transfer_to=stitched_image
+        )
 
 
 @dataclass
@@ -121,8 +274,9 @@ def geowrite(
         transform (affine.Affine): The affine transformation matrix.
         crs (str)
     """
+    assert image.ndim == 3, f"Input Image must of shape HxWxC"
+    bands = image.shape[-1]
 
-    bands = 1 if image.ndim == 2 else image.shape[-1]
     with rasterio.open(
         save_path,
         "w",
@@ -134,7 +288,7 @@ def geowrite(
         transform=transform,
         crs=crs,
     ) as dst:
-        dst.write(image, indexes=1)
+        dst.write(np.rollaxis(image, axis=2))
 
 
 def georead(

@@ -87,6 +87,29 @@ GTKit's modular structure allows you to import specific functionalities as neede
     </tr>
 </table>
 
+### Stitch And Split Geo Reference Image
+```python
+import numpy as np
+
+from gtkit.imgops import georead, geowrite
+from gtkit.imgops import StitchNSplitGeo
+
+sns = StitchNSplitGeo(split_size=(256, 256, 3), img_size=(1500, 1500, 3))
+image = georead(r"22978945_15.tiff")
+
+stitched_image = np.zeros((1500, 1500, 3))
+for win_number, window in sns:
+    split_image, meta = sns.split(image, window)
+    # ....Processing on image
+    stitched_image = sns.stitch(split_image, stitched_image, window)
+
+geowrite(
+    save_path=r"new.tiff",
+    image=stitched_image,
+    transform=image.transform,
+    crs=image.crs,
+)
+```
 ## Documentation
 
 For detailed information on available methods, classes, and their usage, refer to the [GTKit Documentation](https://gtkit.readthedocs.io).
